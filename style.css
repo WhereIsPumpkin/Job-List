@@ -37,6 +37,10 @@ header {
     padding-right: 24px;
 }
 
+.hide{
+  display: none;
+}
+
 .filtersection {
   width: 327px;
   background-color: #ffffff;
@@ -215,7 +219,20 @@ header {
   gap: 16px;
 }
 
-.role-div {
+/* .role-div {
+  background: rgba(92, 165, 165, 0.1);
+  mix-blend-mode: normal;
+  border-radius: 4px;
+  padding: 5px 11px 3px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: inline-flex;
+  align-items: center;
+} */
+
+.wrapstyle{
   background: rgba(92, 165, 165, 0.1);
   mix-blend-mode: normal;
   border-radius: 4px;
@@ -228,18 +245,29 @@ header {
   align-items: center;
 }
 
-#role {
+/* .role-div p {
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
   letter-spacing: -0.123077px;
   color: #5ca5a5;
   max-width: 100%;
+} */
+
+.pstyle{
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.123077px;
+  color: #5ca5a5;
+  max-width: 100%;
+  text-align: center;
 }
 
-.role-div{
+.pstyle{
     cursor: pointer;
 }
+
 
 
 @media screen and (min-width:1440px) {
@@ -329,4 +357,18 @@ header {
         border-bottom: 1px solid #5CA5A5;;
     }
 
+    .sectionexit:hover{
+      background-color: rgba(43, 57, 57, 1);
+    }
+
+    .wrapstyle:hover{
+      background: #5CA5A5;
+      /* color: white; */
+    }
+
+    .wrapstyle:hover p {
+      color: white;
+    }
+
 }
+
