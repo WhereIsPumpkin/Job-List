@@ -5,6 +5,7 @@ const jobListWrapperWrapper = document.querySelector('.joblist-wrapper-wrapper')
 for(let i=0; i < data.length; i++){
     const jobListWrapper = document.createElement('div');
     jobListWrapper.classList.add('joblist-wrapper');
+    jobListWrapper.id = i+1;
     jobListWrapperWrapper.appendChild(jobListWrapper);
 
     const jobBox = document.createElement('div');
@@ -91,6 +92,7 @@ for(let i=0; i < data.length; i++){
     // ROLE
     const rolediv = document.createElement('div');
     rolediv.classList.add('role-div', 'wrapstyle');
+    rolediv.id = data[i].role;
     rolewrap.appendChild(rolediv);
 
     const role = document.createElement('p');
@@ -105,10 +107,10 @@ for(let i=0; i < data.length; i++){
       for (let j = 0; j < languagesArray.length; j++) {
         const languagesdiv = document.createElement('div');
         languagesdiv.classList.add('languages-div', 'wrapstyle');
+        languagesdiv.id = data[i].languages[j];
         rolewrap.appendChild(languagesdiv);
         const languages = document.createElement('p');
         languages.classList.add('pstyle');
-        languages.id = 'languages'+j;
         languagesdiv.appendChild(languages);
         languages.textContent = data[i].languages[j];
       }
@@ -118,6 +120,7 @@ for(let i=0; i < data.length; i++){
    for (let j = 0; j < toolsArray.length; j++){
     const toolsdiv = document.createElement('div');
     toolsdiv.classList.add('tools-div', 'wrapstyle');
+    toolsdiv.id = data[i].tools[j];
     rolewrap.appendChild(toolsdiv);
     const tools = document.createElement('p');
     tools.classList.add('pstyle');
@@ -130,88 +133,121 @@ for(let i=0; i < data.length; i++){
    const leveldiv = document.createElement('div');
     leveldiv.classList.add('level-div', 'wrapstyle');
     rolewrap.appendChild(leveldiv);
+    leveldiv.id = data[i].level;
     const level = document.createElement('p');
     level.classList.add('pstyle');
     level.id = 'level'+i;
     leveldiv.appendChild(level);
     level.textContent = data[i].level;
 
-}
+    
 
+}
+const exit = document.querySelectorAll(".sectionexit");
 const clear = document.querySelector(".clear");
 const filterWrapper = document.querySelector(".filter-section-wrapper");
 const clickList = document.querySelectorAll(".wrapstyle");
 const sectionfilterwrapper = document.querySelector(".sectionfilter-wrapper");
 
-
+let appliedFilters = [];
+let filteredData = data;
 
 clickList.forEach(click => {
   click.addEventListener("click", () => {
-    filterWrapper.classList.remove("hide");
-
     const text = click.querySelector(".pstyle").textContent;
 
-    const sectionfilter = document.createElement('div');
-    sectionfilter.classList.add('sectionfilter');
-    sectionfilterwrapper.appendChild(sectionfilter);
+    let textFound = false; // flag variable
 
-    const filternamewrapper = document.createElement('div');
-    filternamewrapper.classList.add('filtername-wrapper');
-    sectionfilter.appendChild(filternamewrapper);
+    for (let i = 0; i < sectionfilterwrapper.children.length; i++) {
+      if (sectionfilterwrapper.children[i].textContent == text) {
+        textFound = true;
+        break;
+      }
+    }
 
-    const sectionfiltername = document.createElement('p');
-    sectionfiltername.id = "sectionfiltername";
-    filternamewrapper.appendChild(sectionfiltername);
-    sectionfiltername.textContent = text;
+    if (!textFound) {
+      filterWrapper.classList.remove("hide");
 
-    const sectionexit = document.createElement('div');
-    sectionexit.classList.add("sectionexit");
-    sectionfilter.appendChild(sectionexit);
-
-    const exitimg = document.createElement('img');
-    exitimg.src = './images/icon-remove.svg';
-    sectionexit.appendChild(exitimg);
-
-    console.log(text);
-
-    let filteredData = [];
     
-    const filterToolsData = data.filter(element => {
-        if (element.tools.includes(text)) {
-            filteredData.push(element);
-            return true;
-        }
-        return false;
-    });
-    
-    console.log(filteredData);
 
-    const filterLangaugesData = data.filter(element => {
-        return element.languages.includes(text);
-    });
-
-    const filterRolesData = data.filter(element => {
-        return element.role.includes(text);
-    });
-
-    const filterlevelData = data.filter(element => {
-        return element.level.includes(text);
-    });
-
-
-
-    console.log(filterlevelData);
-    console.log(filterRolesData);
-    console.log(filterLangaugesData);
-    console.log(filterToolsData);
+      const sectionfilter = document.createElement('div');
+      sectionfilter.classList.add('sectionfilter');
+      sectionfilterwrapper.appendChild(sectionfilter);
+  
+      const filternamewrapper = document.createElement('div');
+      filternamewrapper.classList.add('filtername-wrapper');
+      sectionfilter.appendChild(filternamewrapper);
+  
+      const sectionfiltername = document.createElement('p');
+      sectionfiltername.id = "sectionfiltername";
+      filternamewrapper.appendChild(sectionfiltername);
+      sectionfiltername.textContent = text;
+  
+      const sectionexit = document.createElement('div');
+      sectionexit.classList.add("sectionexit");
+      sectionfilter.appendChild(sectionexit);
+  
+      const exitimg = document.createElement('img');
+      exitimg.src = './images/icon-remove.svg';
+      sectionexit.appendChild(exitimg);
+  
       
+  
+      console.log(text);
+  
+      filteredData = filteredData.filter(element => {
+          return (
+            element.tools.includes(text) ||
+            element.languages.includes(text) ||
+            element.role.includes(text) ||
+            element.level.includes(text)
+          );
+        });
+
+      appliedFilters.push(filteredData);
+        console.log(appliedFilters);
+    
+      sectionexit.addEventListener("click", () => {
+        sectionfilter.remove();
+        appliedFilters.pop();
+        console.log(appliedFilters);
+        if(sectionfilterwrapper.children.length == 0 ){
+          sectionfilter.remove();
+          filterWrapper.classList.add("hide");
+          for (let i = 0; i < jobListWrapperWrapper.children.length; i++){
+            jobListWrapperWrapper.children[i].style.display = "block"
+          }
+          filteredData = data;
+        }
+      });
+      
+  
+      for (let i = 0; i < jobListWrapperWrapper.children.length; i++) {
+        let hasMatchingId = false;
+        for (let element of filteredData) {
+          if (element.id == jobListWrapperWrapper.children[i].id) {
+            hasMatchingId = true;
+            break;
+          }
+        }
+        if (!hasMatchingId) {
+          jobListWrapperWrapper.children[i].style.display = "none";
+        } else {
+          jobListWrapperWrapper.children[i].style.display = "block";
+        }
+      }
+    }
   });
-
-
 });
+
+
+
 
 clear.addEventListener("click", () => {
     filterWrapper.classList.add("hide");
     sectionfilterwrapper.innerHTML = "";
+    for (let i = 0; i < jobListWrapperWrapper.children.length; i++){
+      jobListWrapperWrapper.children[i].style.display = "block"
+    }
+    filteredData = data;
 })
-
