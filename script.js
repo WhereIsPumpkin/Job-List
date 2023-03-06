@@ -217,8 +217,11 @@ clickList.forEach(click => {
             filterApplied.splice(i, 1);
           }
         }
+
+        filteredData = data;
+
         for(let i=0; i<filterApplied.length; i++){
-          filteredData.filter(element =>{
+          filteredData = filteredData.filter(element =>{
             return (
               element.tools.includes(filterApplied[i]) ||
               element.languages.includes(filterApplied[i]) ||
@@ -227,10 +230,24 @@ clickList.forEach(click => {
             )
           })
         }
-
         console.log(filteredData);
+        for (let i = 0; i < jobListWrapperWrapper.children.length; i++) {
+          let hasMatchingId = false;
+          for (let element of filteredData) {
+            if (element.id == jobListWrapperWrapper.children[i].id) {
+              hasMatchingId = true;
+              break;
+            }
+          }
+          if (!hasMatchingId) {
+            jobListWrapperWrapper.children[i].style.display = "none";
+          } else {
+            jobListWrapperWrapper.children[i].style.display = "block";
+          }
+        }
+        // console.log(filteredData);
 
-        console.log(filterApplied);
+        // console.log(filterApplied);
         if(sectionfilterwrapper.children.length == 0 ){
           sectionfilter.remove();
           filterWrapper.classList.add("hide");
