@@ -149,8 +149,10 @@ const filterWrapper = document.querySelector(".filter-section-wrapper");
 const clickList = document.querySelectorAll(".wrapstyle");
 const sectionfilterwrapper = document.querySelector(".sectionfilter-wrapper");
 
-let appliedFilters = [];
 let filteredData = data;
+let filterApplied = [];
+let x = data;
+
 
 clickList.forEach(click => {
   click.addEventListener("click", () => {
@@ -193,7 +195,10 @@ clickList.forEach(click => {
   
       
   
-      console.log(text);
+      // console.log(text);
+
+      filterApplied.push(text);
+      console.log(filterApplied);
   
       filteredData = filteredData.filter(element => {
           return (
@@ -204,13 +209,28 @@ clickList.forEach(click => {
           );
         });
 
-      appliedFilters.push(filteredData);
-        console.log(appliedFilters);
     
       sectionexit.addEventListener("click", () => {
         sectionfilter.remove();
-        appliedFilters.pop();
-        console.log(appliedFilters);
+        for (let i = 0; i < filterApplied.length; i++) {
+          if (filterApplied[i] === text) {
+            filterApplied.splice(i, 1);
+          }
+        }
+        for(let i=0; i<filterApplied.length; i++){
+          filteredData.filter(element =>{
+            return (
+              element.tools.includes(filterApplied[i]) ||
+              element.languages.includes(filterApplied[i]) ||
+              element.role.includes(filterApplied[i]) ||
+              element.level.includes(filterApplied[i])
+            )
+          })
+        }
+
+        console.log(filteredData);
+
+        console.log(filterApplied);
         if(sectionfilterwrapper.children.length == 0 ){
           sectionfilter.remove();
           filterWrapper.classList.add("hide");
@@ -221,6 +241,7 @@ clickList.forEach(click => {
         }
       });
       
+    
   
       for (let i = 0; i < jobListWrapperWrapper.children.length; i++) {
         let hasMatchingId = false;
